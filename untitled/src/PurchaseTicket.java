@@ -1,4 +1,4 @@
-import javax.swing.*;
+/*import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,4 +42,3 @@ public class PurchaseTicket {
         startPanel.add(fnTextField);
         startPanel.add(lnTextField);
         startPanel.add(search);*/
-}
