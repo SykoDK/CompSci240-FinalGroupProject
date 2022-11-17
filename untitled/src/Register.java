@@ -1,4 +1,4 @@
-import java.awt.Color;
+/*import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -189,4 +189,4 @@ public class Register extends JFrame implements ActionListener   {
         new Register();
     }
 
-}
+}*/

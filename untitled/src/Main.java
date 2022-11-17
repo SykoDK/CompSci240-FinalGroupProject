@@ -7,10 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-/**
- *
- * @author pi
- */
 public class Main {
     private static File airportFile;
     private static File scheduleFile;
@@ -35,10 +31,9 @@ public class Main {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
- /*   public static void loadSchedule() {
+    public static void loadSchedule() {
         String[] line;
         schedule = new ArrayList<Schedule>();
 
@@ -53,24 +48,21 @@ public class Main {
                         line[7], Integer.parseInt(line[8]),
                         Integer.parseInt(line[9]),
                         Integer.parseInt(line[10])));
-                for (Schedule x : schedule) {
-                    x.print();
-                }
             }
             scanner.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 
     public static void main(String[] args) {
-        airportFile = new File("C:/Users/iangr/IdeaProjects/CompSci240-FinalGroupProject/untitled/src/airports.csv");
-        scheduleFile = new File("C:/Users/iangr/IdeaProjects/CompSci240-FinalGroupProject/untitled/src/schedule.txt");
+        airportFile = new File("C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\untitled\\src\\airports.csv");
+        scheduleFile = new File("C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\untitled\\src\\schedule.txt");
 
         loadAirports();
+        loadSchedule();
 
-        for (Map.Entry<String, String> element : airports.entrySet()) {
-            System.out.println(element);
-        }
+        UI gui = new UI();
+        gui.createAndShowUI(airports, schedule);
     }
 }

@@ -1,4 +1,4 @@
-import javax.swing.*;
+/*import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -168,10 +168,6 @@ public class Login extends JFrame implements ActionListener {
 
         }
     }
-    public static void main(String arr[]) {
 
-        new Login();
 
-    }
-
-}
+}*/
