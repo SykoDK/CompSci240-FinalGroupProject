@@ -1,4 +1,4 @@
-import javax.swing.*;
+/*import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -120,9 +120,9 @@ public class Reservation extends JFrame implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
-        JComponent newContentPane = new Reservation();
-      //  newContentPane.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(newContentPane);
+        //JComponent newContentPane = new Reservation();
+        //  newContentPane.setOpaque(true); //content panes must be opaque
+       // frame.setContentPane(newContentPane);
 
         //Display the window.
         frame.pack();
@@ -170,3 +170,4 @@ public class Reservation extends JFrame implements ActionListener {
         });
     }
 }
+*/
