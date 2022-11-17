@@ -1,11 +1,12 @@
-import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,23 +36,26 @@ public class UI extends JFrame implements ActionListener {
     private JTextField returnDateField;
     private JTextField numPassengerField;
 
-    private JComboBox airportBox;
+    private JComboBox cityDepartureCBox;
 
     private HashMap<String, String> airports;
     private ArrayList<Schedule> schedule;
 
+    private String chosenDepartureAirport;
+
+    private Color lineColor = new Color(3,155,216);
+
     /**
      * Constructor for objects of class UI
      */
-    public UI()
-    {
+    public UI() {
         // initialise instance variables
         setResizable(false);
     }
 
     public void search() {
-        for (Map.Entry<String, String> element : airports.entrySet()) {
-            System.out.println(element);
+        for (Map.Entry<String, String> elements : airports.entrySet()) {
+            System.out.println(elements);
         }
 
         for (Schedule x : schedule) {
@@ -61,25 +65,29 @@ public class UI extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
         switch (ae.getActionCommand()) {
-            case "Search": System.out.println("Search button pressed");
+            case "Search":
+                System.out.println("Search button pressed");
                 search();
                 break;
-            case "Reset": System.out.println("Reset button pressed");
+            case "Reset":
+                System.out.println("Reset button pressed");
                 break;
-            case "Cancel": System.out.println("Cancel button pressed");
+            case "Cancel":
+                System.out.println("Cancel button pressed");
                 break;
-            case "Exit": System.out.println("Exit button pressed");
+            case "Exit":
+                System.out.println("Exit button pressed");
                 System.exit(0);
                 break;
         }
 
-        String data = "Departure Airport selected: " + airportBox.getItemAt(airportBox.getSelectedIndex());
-        System.out.println(data);
+        chosenDepartureAirport = String.valueOf(cityDepartureCBox.getItemAt(cityDepartureCBox.getSelectedIndex()));
+        System.out.println(chosenDepartureAirport);
     }
 
     public void createReservationPanel() {
         reservationPanel = new JPanel();
-        reservationPanel.setLayout(new GridLayout(1,2,250,500));
+        reservationPanel.setLayout(new GridLayout(1, 2, 250, 500));
         reservationPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 "Book a Flight", TitledBorder.CENTER, TitledBorder.TOP,
                 new Font("TimeRoman", Font.BOLD, 18)));
@@ -106,8 +114,8 @@ public class UI extends JFrame implements ActionListener {
 
     public void createTextPanel() {
         textPanel = new JPanel(new FlowLayout());
-
-        String[] test = { "asdfda", "rttyr rytr", "uiyoyu", "zcvccvzx"};
+        //fillAirportCBoxFromTxtFile(Airport);
+        String[] test = {"JAX", "ALB", "uiyoyu", "zcvccvzx"};
 
         cityDepartureLabel = new JLabel("Departure City:");
         cityArrivalLabel = new JLabel("Destination City:");
@@ -121,13 +129,12 @@ public class UI extends JFrame implements ActionListener {
         returnDateField = new JTextField(15);
         numPassengerField = new JTextField(15);
 
-        airportBox = new JComboBox(test);
-        airportBox.setEditable(true);
-        airportBox.addActionListener(this);
+        cityDepartureCBox = new JComboBox(test);
+        cityDepartureCBox.setEditable(true);
+        cityDepartureCBox.addActionListener(this);
 
         textPanel.add(cityDepartureLabel);
-        textPanel.add(airportBox);
-        textPanel.add(cityDepartureField);
+        textPanel.add(cityDepartureCBox);
         textPanel.add(cityArrivalLabel);
         textPanel.add(cityArrivalField);
         textPanel.add(departureDateLabel);
@@ -137,8 +144,25 @@ public class UI extends JFrame implements ActionListener {
         textPanel.add(numPassengerLabel);
         textPanel.add(numPassengerField);
 
+    }
 
 
+
+    public void fillAirportCBoxFromTxtFile() {
+        String filePath = "C:\\Users\\iangr\\CompSci240-FinalGroupProject\\ARS\\src\\airports.csv";
+        File file = new File(filePath);
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            Object[] Airports = br.lines().toArray();
+
+            for (Object airport : Airports) {
+                String Airport = airport.toString();
+                cityDepartureCBox.addItem(Airport);
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void createAndShowUI(HashMap<String, String> airPorts, ArrayList<Schedule> sched) {
