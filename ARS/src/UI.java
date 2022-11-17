@@ -7,9 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class UI extends JFrame implements ActionListener {
     // instance variables - replace the example below with your own
@@ -37,9 +35,15 @@ public class UI extends JFrame implements ActionListener {
     private JTextField numPassengerField;
 
     private JComboBox cityDepartureCBox;
+    private JComboBox cityArrivalCBox;
+    private JComboBox numPassengerCBox;
+
+    private DateTextField  departureDateTextField;
+    private DateTextField returnDateTextField;
 
     private HashMap<String, String> airports;
     private ArrayList<Schedule> schedule;
+    private ArrayList<String> Airports;
 
     private String chosenDepartureAirport;
 
@@ -114,8 +118,9 @@ public class UI extends JFrame implements ActionListener {
 
     public void createTextPanel() {
         textPanel = new JPanel(new FlowLayout());
-        //fillAirportCBoxFromTxtFile(Airport);
+
         String[] test = {"JAX", "ALB", "uiyoyu", "zcvccvzx"};
+        String[] numPassenger = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
         cityDepartureLabel = new JLabel("Departure City:");
         cityArrivalLabel = new JLabel("Destination City:");
@@ -129,37 +134,49 @@ public class UI extends JFrame implements ActionListener {
         returnDateField = new JTextField(15);
         numPassengerField = new JTextField(15);
 
-        cityDepartureCBox = new JComboBox(test);
+        cityDepartureCBox = new JComboBox(Airports.toArray());
         cityDepartureCBox.setEditable(true);
         cityDepartureCBox.addActionListener(this);
+
+        cityArrivalCBox = new JComboBox(Airports.toArray());
+        cityArrivalCBox.setEditable(true);
+        cityArrivalCBox.addActionListener(this);
+
+        numPassengerCBox= new JComboBox(numPassenger);
+        numPassengerCBox.setEditable(true);
+        numPassengerCBox.addActionListener(this);
+
+        departureDateTextField = new DateTextField();
+        returnDateTextField = new DateTextField();
 
         textPanel.add(cityDepartureLabel);
         textPanel.add(cityDepartureCBox);
         textPanel.add(cityArrivalLabel);
-        textPanel.add(cityArrivalField);
+        textPanel.add(cityArrivalCBox);
         textPanel.add(departureDateLabel);
-        textPanel.add(departureDateField);
+        textPanel.add(departureDateTextField);
         textPanel.add(returnDateLabel);
-        textPanel.add(returnDateField);
+        textPanel.add(returnDateTextField);
         textPanel.add(numPassengerLabel);
-        textPanel.add(numPassengerField);
+        textPanel.add(numPassengerCBox);
 
     }
 
 
 
     public void fillAirportCBoxFromTxtFile() {
-        String filePath = "C:\\Users\\iangr\\CompSci240-FinalGroupProject\\ARS\\src\\airports.csv";
-        File file = new File(filePath);
+        String filePath = "C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\airports.csv";
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            Object[] Airports = br.lines().toArray();
+            Scanner reader = new Scanner(new File(filePath));
+            Airports = new ArrayList<>();
 
-            for (Object airport : Airports) {
-                String Airport = airport.toString();
-                cityDepartureCBox.addItem(Airport);
+            while (reader.hasNextLine()){
+                Airports.add(reader.nextLine());
             }
+                 reader.close();
+
+
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -174,6 +191,7 @@ public class UI extends JFrame implements ActionListener {
         airports = airPorts;
         schedule = sched;
 
+        fillAirportCBoxFromTxtFile();
         createReservationPanel();
         createButtonPanel();
         createTextPanel();
