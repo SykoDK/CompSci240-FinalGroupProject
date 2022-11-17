@@ -147,6 +147,7 @@ public class UI extends JFrame implements ActionListener {
         frame.setSize(1200,800);
         frame.setLayout(new BorderLayout());
 
+
         airports = airPorts;
         schedule = sched;
 
