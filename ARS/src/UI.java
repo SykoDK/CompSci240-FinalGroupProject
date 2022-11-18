@@ -28,12 +28,6 @@ public class UI extends JFrame implements ActionListener {
     private JLabel returnDateLabel;
     private JLabel numPassengerLabel;
 
-    private JTextField cityDepartureField;
-    private JTextField cityArrivalField;
-    private JTextField departureDateField;
-    private JTextField returnDateField;
-    private JTextField numPassengerField;
-
     private JComboBox cityDepartureCBox;
     private JComboBox cityArrivalCBox;
     private JComboBox numPassengerCBox;
@@ -119,7 +113,6 @@ public class UI extends JFrame implements ActionListener {
     public void createTextPanel() {
         textPanel = new JPanel(new FlowLayout());
 
-        String[] test = {"JAX", "ALB", "uiyoyu", "zcvccvzx"};
         String[] numPassenger = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
 
         cityDepartureLabel = new JLabel("Departure City:");
@@ -127,12 +120,6 @@ public class UI extends JFrame implements ActionListener {
         departureDateLabel = new JLabel("Departure Date:");
         returnDateLabel = new JLabel("Return Date:");
         numPassengerLabel = new JLabel("Number of Tickets");
-
-        cityDepartureField = new JTextField(15);
-        cityArrivalField = new JTextField(15);
-        departureDateField = new JTextField(15);
-        returnDateField = new JTextField(15);
-        numPassengerField = new JTextField(15);
 
         cityDepartureCBox = new JComboBox(Airports.toArray());
         cityDepartureCBox.setEditable(true);
