@@ -10,7 +10,6 @@ import java.io.FileReader;
 import java.util.*;
 
 public class UI extends JFrame implements ActionListener {
-    // instance variables - replace the example below with your own
     private JFrame frame;
 
     private JButton exitButton;
@@ -40,6 +39,16 @@ public class UI extends JFrame implements ActionListener {
     private ArrayList<String> Airports;
 
     private String chosenDepartureAirport;
+    private String chosenArrivalAirport;
+    private String chosenDepartureDate;
+    private String chosenDepartureMonth;
+    private String chosenDepartureYear;
+    private String chosenDepartureDay;
+    private String chosenReturnMonth;
+    private String chosenReturnYear;
+    private String chosenReturnDay;
+    private String chosenReturnDate;
+    private String chosenNumPassenger;
 
     private Color lineColor = new Color(3,155,216);
 
@@ -52,26 +61,63 @@ public class UI extends JFrame implements ActionListener {
     }
 
     public void search() {
-        for (Map.Entry<String, String> elements : airports.entrySet()) {
+        String schedulePath = "C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\schedule.txt";
+        chosenDepartureAirport = (String) ((cityDepartureCBox.getSelectedItem().toString()).split(",")[0]);
+        System.out.println(chosenDepartureAirport);
+        chosenArrivalAirport = (String) ((cityArrivalCBox.getSelectedItem().toString()).split(",")[0]);
+        System.out.println(chosenArrivalAirport);
+        chosenDepartureMonth = departureDateTextField.getText().split("/")[0];
+        chosenDepartureDay = departureDateTextField.getText().split("/")[1] + ",";
+        chosenDepartureYear = departureDateTextField.getText().split("/")[2];
+        chosenReturnMonth = returnDateTextField.getText().split("/")[0] ;
+        chosenReturnDay = returnDateTextField.getText().split("/")[1];
+        chosenReturnYear = returnDateTextField.getText().split("/")[2];
+        chosenDepartureDate = chosenDepartureYear +"," + chosenDepartureMonth + "," + chosenDepartureDay;
+
+        chosenReturnDate = chosenReturnYear + "," + chosenReturnMonth + "," + chosenReturnDay;
+
+        System.out.println(chosenReturnDate);
+        chosenNumPassenger = (String) numPassengerCBox.getSelectedItem();
+
+        String searchString1 = (chosenDepartureDate);
+        String searchString2 = (chosenArrivalAirport + "," + chosenDepartureAirport);
+        try {
+            File file = new File(schedulePath);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.contains(searchString1) && line.contains(searchString2)) {
+                    System.out.println(line);
+                }
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("File not found");
+        }
+       /* for (Map.Entry<String, String> elements : airports.entrySet()) {
             System.out.println(elements);
         }
 
         for (Schedule x : schedule) {
-            x.print();
-        }
+           // x.print();
+        }*/
     }
 
     public void actionPerformed(ActionEvent ae) {
         switch (ae.getActionCommand()) {
             case "Search":
-                System.out.println("Search button pressed");
+               // System.out.println("Search button pressed");
                 search();
                 break;
             case "Reset":
-                System.out.println("Reset button pressed");
+                cityDepartureCBox.setSelectedIndex(0);
+                cityArrivalCBox.setSelectedIndex(0);
+                departureDateTextField.setText("");
+                returnDateTextField.setText("");
+                numPassengerCBox.setSelectedIndex(0);
                 break;
             case "Cancel":
-                System.out.println("Cancel button pressed");
                 break;
             case "Exit":
                 System.out.println("Exit button pressed");
@@ -79,8 +125,6 @@ public class UI extends JFrame implements ActionListener {
                 break;
         }
 
-        chosenDepartureAirport = String.valueOf(cityDepartureCBox.getItemAt(cityDepartureCBox.getSelectedIndex()));
-        System.out.println(chosenDepartureAirport);
     }
 
     public void createReservationPanel() {
@@ -122,11 +166,11 @@ public class UI extends JFrame implements ActionListener {
         numPassengerLabel = new JLabel("Number of Tickets");
 
         cityDepartureCBox = new JComboBox(Airports.toArray());
-        cityDepartureCBox.setEditable(true);
+        cityDepartureCBox.setEditable(false);
         cityDepartureCBox.addActionListener(this);
 
         cityArrivalCBox = new JComboBox(Airports.toArray());
-        cityArrivalCBox.setEditable(true);
+        cityArrivalCBox.setEditable(false);
         cityArrivalCBox.addActionListener(this);
 
         numPassengerCBox= new JComboBox(numPassenger);

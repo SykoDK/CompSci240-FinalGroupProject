@@ -33,7 +33,7 @@ public class Main {
         }
     }
 
-    public static void loadSchedule() {
+   /* public static void loadSchedule() {
         String[] line;
         schedule = new ArrayList<Schedule>();
 
@@ -52,15 +52,15 @@ public class Main {
             scanner.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-    }
+        }*/
+
 
     public static void main(String[] args) {
         airportFile = new File("C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\airports.csv");
         scheduleFile = new File("C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\schedule.txt");
 
-        loadAirports();
-        loadSchedule();
+        //loadAirports();
+        //loadSchedule();
 
         UI gui = new UI();
         gui.createAndShowUI(airports, schedule);
