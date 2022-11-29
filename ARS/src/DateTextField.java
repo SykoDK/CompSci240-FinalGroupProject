@@ -126,6 +126,10 @@ public class DateTextField extends JTextField {
             return new Date();
         }
     }
+    public static Date getToday() throws NullPointerException {
+        return new Date();
+
+    }
 
     private class DatePanel extends JPanel implements ChangeListener {
         int startYear = 1980;
