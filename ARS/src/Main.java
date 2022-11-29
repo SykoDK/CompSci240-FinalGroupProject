@@ -57,6 +57,7 @@ public class Main {
 
 
     public static void main(String[] args) {
+
         airportFile = new File("C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\airports.csv");
         scheduleFile = new File("C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\southwest.txt");
 
@@ -65,6 +66,7 @@ public class Main {
 
         loadAirports();
         loadSchedule();
+
 
 
         UI gui = new UI();

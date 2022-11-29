@@ -17,6 +17,7 @@ public class UI extends JFrame implements ActionListener {
     private JButton searchButton;
     private JButton resetButton;
     private JButton cancelButton;
+    //private JButton s1;
 
     private JPanel buttonPanel;
     private JPanel reservationPanel;
@@ -33,10 +34,12 @@ public class UI extends JFrame implements ActionListener {
     private JLabel departureDateLabel;
     private JLabel returnDateLabel;
     private JLabel numPassengerLabel;
+    private JLabel seatSelectLabel;
 
     private JComboBox cityDepartureCBox;
     private JComboBox cityArrivalCBox;
     private JComboBox numPassengerCBox;
+    private JComboBox seatSelectCBox;
 
     private DateTextField  departureDateTextField;
     private DateTextField returnDateTextField;
@@ -136,6 +139,7 @@ public class UI extends JFrame implements ActionListener {
                 departureDateTextField.setDate(DateTextField.getToday());
                 returnDateTextField.setDate(DateTextField.getToday());
                 numPassengerCBox.setSelectedIndex(0);
+                seatSelectCBox.setSelectedIndex(0);
                 break;
             case "Book":
                 System.out.println("Flight Booked");
@@ -267,12 +271,14 @@ public class UI extends JFrame implements ActionListener {
         textPanel = new JPanel(new FlowLayout());
         textPanel.setBackground(Color.WHITE);
         String[] numPassenger = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+        String[] seatNum = {"A1", "A2", "A3", "A4", "B1", "B2", "B3", "B4"};
 
         cityDepartureLabel = new JLabel("Departure City:");
         cityArrivalLabel = new JLabel("Destination City:");
         departureDateLabel = new JLabel("Departure Date:");
         returnDateLabel = new JLabel("Return Date:");
         numPassengerLabel = new JLabel("Number of Tickets");
+        seatSelectLabel = new JLabel("Which seat(s) do you want?");
 
         cityDepartureCBox = new JComboBox(Airports.toArray());
         cityDepartureCBox.setEditable(false);
@@ -285,6 +291,10 @@ public class UI extends JFrame implements ActionListener {
         numPassengerCBox= new JComboBox(numPassenger);
         numPassengerCBox.setEditable(true);
         numPassengerCBox.addActionListener(this);
+
+        seatSelectCBox = new JComboBox(seatNum);
+        seatSelectCBox.setEditable(true);
+        seatSelectCBox.addActionListener(this);
 
         departureDateTextField = new DateTextField();
         returnDateTextField = new DateTextField();
@@ -299,13 +309,15 @@ public class UI extends JFrame implements ActionListener {
         textPanel.add(returnDateTextField);
         textPanel.add(numPassengerLabel);
         textPanel.add(numPassengerCBox);
+        textPanel.add(seatSelectLabel);
+        textPanel.add(seatSelectCBox);
 
     }
 
 
 
     public void fillAirportCBoxFromTxtFile() {
-        String filePath = "C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\airports.csv";
+        String filePath = "C:\\Users\\vader\\IdeaProjects\\CompSci240-FinalGroupProject1\\ARS\\src\\airports.csv";
 
         try {
             Scanner reader = new Scanner(new File(filePath));
