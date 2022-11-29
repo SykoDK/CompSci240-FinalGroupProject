@@ -15,9 +15,8 @@ public class Schedule
     private int distance;
     private int arrivalTime;
     
-    /**
-     * Constructor for objects of class Schedule
-     */
+    public Schedule() {
+    }
     public Schedule(LocalDate d, String airln, int flightNum, String orig, String dest,
                     int departTime, int dist, int arrTime) {
         this.date = d;
@@ -30,7 +29,7 @@ public class Schedule
         this.arrivalTime = arrTime;
     }
 
-   /* public void print() {
+    public void print() {
         System.out.println("Date = " + this.date);
         System.out.println("airline = " + this.airline);
         System.out.println("flight number = " + this.flightNumber);
@@ -40,7 +39,7 @@ public class Schedule
         System.out.println("distance = " + this.distance);
         System.out.println("arrival time = " + this.arrivalTime);
         System.out.println();
-    }*/
+    }
         
     public int getYear() {
         return year;
@@ -78,7 +77,7 @@ public class Schedule
         return departureTime;
     }
 
-    public int getDistnace() {
+    public int getDistance() {
         return distance;
     }
     
