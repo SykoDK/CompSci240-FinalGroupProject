@@ -3,10 +3,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -17,6 +15,8 @@ public class UI extends JFrame implements ActionListener {
     private JButton searchButton;
     private JButton resetButton;
     private JButton cancelButton;
+    private JButton confirmButton;
+
     //private JButton s1;
 
     private JPanel buttonPanel;
@@ -28,6 +28,9 @@ public class UI extends JFrame implements ActionListener {
     private JPanel searchReturnResultsPanel;
     private JPanel searchResultPanel;
     private JPanel searchResultsButtonPanel;
+    private JPanel flightConfirmationPanel;
+    private JPanel flightConfirmationButtonPanel;
+    private JPanel confirmationPanel;
 
     private JLabel cityDepartureLabel;
     private JLabel cityArrivalLabel;
@@ -35,6 +38,7 @@ public class UI extends JFrame implements ActionListener {
     private JLabel returnDateLabel;
     private JLabel numPassengerLabel;
     private JLabel seatSelectLabel;
+
 
     private JComboBox cityDepartureCBox;
     private JComboBox cityArrivalCBox;
@@ -189,7 +193,45 @@ public class UI extends JFrame implements ActionListener {
                 break;
             case "Book":
                 System.out.println("Flight Booked");
+                searchResultPanel.setVisible(false);
+                createFlightConfirmationPanel();
+                flightConfirmationPanel.setVisible(true);
+                flightConfirmationPanel.repaint();
+                flightConfirmationPanel.revalidate();
+                flightConfirmationButtonPanel.setVisible(true);
+
                 Reservation reservation = new Reservation();
+                reservation.setDepartureFlight(departFlightDetails.get(0));
+                reservation.setReturnFlight(returnFlightDetails.get(0));
+                reservation.setNumPassengers(chosenNumPassenger);
+                reservation.setSeatType(seatSelectCBox.getSelectedItem().toString());
+                reservation.setDepartureDate(departureDateTextField.getText());
+                reservation.setReturnDate(returnDateTextField.getText());
+                reservation.setDepartureAirport(chosenDepartureAirport);
+                reservation.setArrivalAirport(chosenArrivalAirport);
+                reservation.setDepartureTime(departFlightDetails.get(1));
+                reservation.setArrivalTime(departFlightDetails.get(2));
+                reservation.setReturnDepartureTime(returnFlightDetails.get(1), returnDateTextField);
+                reservation.setReturnArrivalTime(returnFlightDetails.get(2), returnDateTextField);
+                reservation.setDepartureFlightNumber(departFlightDetails.get(0));
+                reservation.setReturnFlightNumber(returnFlightDetails.get(0));
+                reservation.getDepartureFlightNumber();
+                System.out.println(reservation.getDepartureFlight());
+                System.out.println(reservation.getReturnFlight());
+                System.out.println(reservation.getNumPassengers());
+                System.out.println(reservation.getSeatType());
+                System.out.println(reservation.getDepartureDate());
+                System.out.println(reservation.getReturnDate());
+
+                break;
+            case "Confirm":
+                System.out.println("Flight Confirmed");
+                flightConfirmationPanel.setVisible(false);
+                createFlightConfirmationPanel();
+                flightConfirmationPanel.setVisible(true);
+                flightConfirmationPanel.repaint();
+                flightConfirmationPanel.revalidate();
+                flightConfirmationButtonPanel.setVisible(true);
                 break;
             case "Cancel":
                 //searchPanel.setVisible(false);
@@ -205,6 +247,68 @@ public class UI extends JFrame implements ActionListener {
 
     }
 
+    public void createFlightConfirmationPanel() {
+        flightConfirmationPanel = new JPanel();
+        flightConfirmationPanel.setLayout(new BoxLayout(flightConfirmationPanel, BoxLayout.Y_AXIS));
+        flightConfirmationPanel.setBackground(Color.WHITE);
+        flightConfirmationPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        add(flightConfirmationPanel);
+        flightConfirmationButtonPanel = new JPanel();
+        flightConfirmationButtonPanel.setLayout(new BoxLayout(flightConfirmationButtonPanel, BoxLayout.X_AXIS));
+        flightConfirmationButtonPanel.setBackground(Color.WHITE);
+        flightConfirmationButtonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        confirmButton = new JButton("Confirm");
+        confirmButton.addActionListener(this);
+        confirmButton.setActionCommand("Confirm");
+        cancelButton = new JButton("Cancel");
+        cancelButton.addActionListener(this);
+        cancelButton.setActionCommand("Cancel");
+
+        add(flightConfirmationButtonPanel);
+
+    }
+    public void createConfirmationScreeen() {
+        confirmationPanel = new JPanel();
+        confirmationPanel.setLayout(new GridLayout(2, 1));
+        confirmationPanel.setBackground(Color.WHITE);
+        confirmationPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JPanel confirmationTextPanel = new JPanel();
+        confirmationTextPanel.setLayout(new GridLayout(2, 1));
+        confirmationTextPanel.setBackground(Color.WHITE);
+        confirmationTextPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JLabel confirmationLabel = new JLabel("Thank you for booking with us!");
+        confirmationLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        confirmationLabel.setForeground(Color.BLACK);
+        confirmationLabel.setHorizontalAlignment(JLabel.CENTER);
+        confirmationLabel.setVerticalAlignment(JLabel.CENTER);
+        confirmationTextPanel.add(confirmationLabel);
+
+        JLabel confirmationLabel2 = new JLabel("Your reservation number is: ");
+        confirmationLabel2.setFont(new Font("Arial", Font.BOLD, 20));
+        confirmationLabel2.setForeground(Color.BLACK);
+        confirmationLabel2.setHorizontalAlignment(JLabel.CENTER);
+        confirmationLabel2.setVerticalAlignment(JLabel.CENTER);
+        confirmationTextPanel.add(confirmationLabel2);
+
+        JPanel confirmationButtonPanel = new JPanel();
+        confirmationButtonPanel.setLayout(new GridLayout(1, 1));
+        confirmationButtonPanel.setBackground(Color.WHITE);
+        confirmationButtonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JButton exitButton = new JButton("Exit");
+        exitButton.setFont(new Font("Arial", Font.BOLD, 20));
+        exitButton.setForeground(Color.BLACK);
+        exitButton.setBackground(Color.WHITE);
+        exitButton.addActionListener(this);
+        exitButton.setActionCommand("Exit");
+        confirmationButtonPanel.add(exitButton);
+
+        confirmationPanel.add(confirmationTextPanel);
+        confirmationPanel.add(confirmationButtonPanel);
+    }
     public void createReservationPanel() {
         reservationPanel = new JPanel();
         reservationPanel.setLayout(new GridLayout(1, 2, 250, 500));
@@ -222,7 +326,7 @@ public class UI extends JFrame implements ActionListener {
         searchResultPanel = new JPanel();
         searchResultPanel.setLayout(new GridLayout(1, 2, 250, 500));
         searchResultPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                "Available FLights", TitledBorder.CENTER, TitledBorder.TOP,
+                "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
                 new Font("TimeRoman", Font.BOLD, 18)));
         searchDepartResultsPanel = new JPanel();
         searchDepartResultsPanel.setLayout(new FlowLayout());

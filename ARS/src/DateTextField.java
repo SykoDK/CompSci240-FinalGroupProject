@@ -249,6 +249,13 @@ public class DateTextField extends JTextField {
                     daysButton[i][j] = numBtn;
                     panel.add(numBtn);
                     actionCommandId++;
+                    JButton cancel = new JButton();
+                    cancel.setText("Cancel");
+                    cancel.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent event) {
+                            dateDialog.setVisible(false);
+                        }
+                    });
                 }
 
             return panel;
