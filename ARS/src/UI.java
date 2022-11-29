@@ -318,13 +318,13 @@ public class UI extends JFrame implements ActionListener {
     }
 
     public void createAvailableFLights() {
-        availableFlightsPanel = new JPanel();
+        /*availableFlightsPanel = new JPanel();
         availableFlightsPanel.setLayout(new GridLayout(1, 2, 250, 500));
         availableFlightsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
-                new Font("TimeRoman", Font.BOLD, 18)));
+                new Font("TimeRoman", Font.BOLD, 18)));*/
         searchResultPanel = new JPanel();
-        searchResultPanel.setLayout(new GridLayout(1, 2, 250, 500));
+        searchResultPanel.setLayout(new GridLayout(2, 1, 250, 50));
         searchResultPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
                 new Font("TimeRoman", Font.BOLD, 18)));
@@ -334,11 +334,11 @@ public class UI extends JFrame implements ActionListener {
                 " Depart From " + chosenDepartureAirport + " to " + chosenArrivalAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
                 new Font("TimeRoman", Font.BOLD, 18)));
 
-        /*searchReturnResultsPanel = new JPanel();
+        searchReturnResultsPanel = new JPanel();
         searchReturnResultsPanel.setLayout(new FlowLayout());
         searchReturnResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 " Return From " + chosenArrivalAirport + " to " + chosenDepartureAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
-                new Font("TimeRoman", Font.BOLD, 18)));*/
+                new Font("TimeRoman", Font.BOLD, 18)));
 
     }
 
@@ -367,11 +367,11 @@ public class UI extends JFrame implements ActionListener {
                 " Depart From " + chosenDepartureAirport + " to " + chosenArrivalAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
                 new Font("TimeRoman", Font.BOLD, 18)));*/
 
-        searchReturnResultsPanel = new JPanel();
+        /*searchReturnResultsPanel = new JPanel();
         searchReturnResultsPanel.setLayout(new FlowLayout());
         searchReturnResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 " Return From " + chosenArrivalAirport + " to " + chosenDepartureAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
-                new Font("TimeRoman", Font.BOLD, 18)));
+                new Font("TimeRoman", Font.BOLD, 18)));*/
 
         for (int i = 0; i < departFlights.size(); i++) {
             departureTime = Integer.parseInt(departFlights.get(i).split(",")[8]);
