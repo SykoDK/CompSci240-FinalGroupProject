@@ -5,7 +5,7 @@
  * @version (a version number or a date)
  */
 public class Passenger {
-    private Reservation reservation;
+   // private Reservation reservation;
     private Seat seat;
     private String name;
 
