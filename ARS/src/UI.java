@@ -49,6 +49,7 @@ public class UI extends JFrame implements ActionListener {
     private ArrayList<String> Airports;
     private ArrayList<String> departFlights = new ArrayList<String>();
     private ArrayList<String> departFlightDetails = new ArrayList<String>();
+    private ArrayList<String> returnFlightDetails = new ArrayList<String>();
     private ArrayList<String> returnFlights = new ArrayList<String>();
     private String chosenDepartureAirport;
     private String chosenArrivalAirport;
@@ -77,9 +78,9 @@ public class UI extends JFrame implements ActionListener {
 
     public void searchDepartFlights() {
         String schedulePath = "C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\schedule.txt";
-        chosenDepartureAirport = (String) ((cityDepartureCBox.getSelectedItem().toString()).split(",")[0]);
+        chosenDepartureAirport = ((cityDepartureCBox.getSelectedItem().toString()).split(",")[0]);
         System.out.println(chosenDepartureAirport);
-        chosenArrivalAirport = (String) ((cityArrivalCBox.getSelectedItem().toString()).split(",")[0]);
+        chosenArrivalAirport = ((cityArrivalCBox.getSelectedItem().toString()).split(",")[0]);
         System.out.println(chosenArrivalAirport);
         chosenDepartureMonth = departureDateTextField.getText().split("/")[0];
         chosenDepartureDay = departureDateTextField.getText().split("/")[1] + ",";
@@ -121,16 +122,61 @@ public class UI extends JFrame implements ActionListener {
         }*/
     }
 
+    public void searchReturnFlights() {
+        String schedulePath = "C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\schedule.txt";
+
+        System.out.println(chosenReturnDate);
+        chosenNumPassenger = (String) numPassengerCBox.getSelectedItem();
+
+        String searchString1 = (chosenReturnDate);
+        String searchString2 = (chosenArrivalAirport + "," + chosenDepartureAirport);
+        try {
+            File file = new File(schedulePath);
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.contains(searchString1) && line.contains(searchString2)) {
+                    System.out.println(line);
+                    returnFlights.add(line);
+
+                }
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("File not found");
+        }
+       /* for (Map.Entry<String, String> elements : airports.entrySet()) {
+            System.out.println(elements);
+        }
+
+        for (Schedule x : schedule) {
+           // x.print();
+        }*/
+    }
+
     public void actionPerformed(ActionEvent ae) {
         switch (ae.getActionCommand()) {
             case "Search":
                 searchDepartFlights();
+                searchReturnFlights();
                 reservationPanel.setVisible(false);
                 textPanel.setVisible(false);
                 createAvailableFLights();
-                createSearchResultsPanel();
-                searchDepartResultsPanel.setVisible(true);
-                searchDepartResultsPanel.repaint();
+                createDeparturePanel();
+                createReturnPanel();
+               // createSearchResultsPanel();
+                searchResultPanel.setVisible(true);
+                searchResultPanel.repaint();
+                searchResultPanel.revalidate();
+
+
+               // createReturnPanel();
+                //searchDepartResultsPanel.setVisible(true);
+                //searchReturnResultsPanel.setVisible(true);
+                //searchDepartResultsPanel.repaint();
+               // searchReturnResultsPanel.repaint();
+
                 createButtonPanel();
                 break;
             case "Reset":
@@ -143,6 +189,7 @@ public class UI extends JFrame implements ActionListener {
                 break;
             case "Book":
                 System.out.println("Flight Booked");
+                Reservation reservation = new Reservation();
                 break;
             case "Cancel":
                 //searchPanel.setVisible(false);
@@ -166,16 +213,37 @@ public class UI extends JFrame implements ActionListener {
                 new Font("TimeRoman", Font.BOLD, 18)));
     }
 
-    public void createAvailableFLights(){
+    public void createAvailableFLights() {
         availableFlightsPanel = new JPanel();
         availableFlightsPanel.setLayout(new GridLayout(1, 2, 250, 500));
         availableFlightsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
                 new Font("TimeRoman", Font.BOLD, 18)));
-    }
-    public void createSearchResultsPanel() {
-        JButton button = new JButton("Book");
+        searchResultPanel = new JPanel();
+        searchResultPanel.setLayout(new GridLayout(1, 2, 250, 500));
+        searchResultPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                "Available FLights", TitledBorder.CENTER, TitledBorder.TOP,
+                new Font("TimeRoman", Font.BOLD, 18)));
+        searchDepartResultsPanel = new JPanel();
+        searchDepartResultsPanel.setLayout(new FlowLayout());
+        searchDepartResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                " Depart From " + chosenDepartureAirport + " to " + chosenArrivalAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
+                new Font("TimeRoman", Font.BOLD, 18)));
 
+        /*searchReturnResultsPanel = new JPanel();
+        searchReturnResultsPanel.setLayout(new FlowLayout());
+        searchReturnResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                " Return From " + chosenArrivalAirport + " to " + chosenDepartureAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
+                new Font("TimeRoman", Font.BOLD, 18)));*/
+
+    }
+
+
+    public void createDeparturePanel() {
+
+        JButton book = new JButton("Book");
+        book.addActionListener(this);
+        book.setActionCommand("Book");
 
         int departureTime = 0;
         int arrivalTime = 0;
@@ -183,7 +251,7 @@ public class UI extends JFrame implements ActionListener {
         int flightTimeHours = 0;
         int flightTimeMinutes = 0;
 
-        searchResultPanel = new JPanel();
+        /*searchResultPanel = new JPanel();
         searchResultPanel.setLayout(new GridLayout(2, 2, 100, 100));
         searchResultPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
@@ -193,7 +261,7 @@ public class UI extends JFrame implements ActionListener {
         searchDepartResultsPanel.setLayout(new FlowLayout());
         searchDepartResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 " Depart From " + chosenDepartureAirport + " to " + chosenArrivalAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
-                new Font("TimeRoman", Font.BOLD, 18)));
+                new Font("TimeRoman", Font.BOLD, 18)));*/
 
         searchReturnResultsPanel = new JPanel();
         searchReturnResultsPanel.setLayout(new FlowLayout());
@@ -208,9 +276,9 @@ public class UI extends JFrame implements ActionListener {
             int departureMonth = Integer.parseInt(departFlights.get(i).split(",")[1]);
             int departureYear = Integer.parseInt(departFlights.get(i).split(",")[0]);
             System.out.println(departureDay + " " + departureMonth + " " + departureYear);
-            String departureTimeStr = String.format("%02d:%02d", departureTime / 100, departureTime % 100);
+            String departureTimeStr = String.format("%2d:%02d", departureTime / 100, departureTime % 100);
             System.out.println(departureTimeStr);
-            String arrivalTimeStr = String.format("%02d:%02d", arrivalTime / 100, arrivalTime % 100);
+            String arrivalTimeStr = String.format("%2d:%02d", arrivalTime / 100, arrivalTime % 100);
             System.out.println(arrivalTimeStr);
             flightTime = arrivalTime - departureTime;
             flightTimeHours = flightTime / 100;
@@ -221,32 +289,187 @@ public class UI extends JFrame implements ActionListener {
             departFlightDetails.add("Flight Number: " + departFlights.get(i).split(",")[5] + " Departure Time: " + departureTimeStr + " Arrival Time: " + arrivalTimeStr + " Flight Time: " + flightTimeStr + " DepartureDate: " + departureMonth + "/" + departureDay + "/" + departureYear);
             System.out.println(departFlightDetails);
         }
-        searchDepartResultsPanel.add(button);
-        button.addActionListener(this);
+        searchDepartResultsPanel.add(book);
+        book.addActionListener(this);
 
-        String[] flightList = new String[departFlightDetails.size()];
-        flightList = departFlightDetails.toArray(flightList);
+        String[] departFlightList = new String[departFlightDetails.size()];
+        departFlightList = departFlightDetails.toArray(departFlightList);
 
         for (int i = 0; i < departFlightDetails.size(); i++) {
-            JLabel label = new JLabel(flightList[i]);
+            JLabel label = new JLabel(departFlightList[i]);
         }
-        JList<String> flightList1 = new JList<>(flightList);
-        flightList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        flightList1.setLayoutOrientation(JList.VERTICAL);
-        flightList1.setVisibleRowCount(-1);
-        JScrollPane listScroller = new JScrollPane(flightList1);
+        JList<String> departList1 = new JList<>(departFlightList);
+        departList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        departList1.setLayoutOrientation(JList.VERTICAL);
+        departList1.setVisibleRowCount(-1);
+        JScrollPane listScroller = new JScrollPane(departList1);
         listScroller.setPreferredSize(new Dimension(800, 200));
         searchDepartResultsPanel.add(listScroller);
-        searchDepartResultsPanel.add(button);
-        button.addActionListener(this);
-        button.setActionCommand("Book");
+        searchDepartResultsPanel.add(book);
+        book.addActionListener(this);
+        book.setActionCommand("Book");
         searchResultPanel.add(searchDepartResultsPanel);
         searchResultPanel.add(searchReturnResultsPanel);
         frame.add(searchResultPanel);
         frame.setVisible(true);
-
     }
 
+
+        public void createReturnPanel () {
+
+            int rdepartureTime = 0;
+            int rarrivalTime = 0;
+            int rflightTime = 0;
+            int rflightTimeHours = 0;
+            int rflightTimeMinutes = 0;
+
+            JButton book1 = new JButton("Book");
+            book1.addActionListener(this);
+            book1.setActionCommand("Book");
+
+
+            /*searchResultPanel = new JPanel();
+            searchResultPanel.setLayout(new GridLayout(2, 2, 100, 100));
+            searchResultPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                    "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("TimeRoman", Font.BOLD, 18)));
+
+
+            searchReturnResultsPanel = new JPanel();
+            searchReturnResultsPanel.setLayout(new FlowLayout());
+            searchReturnResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                    " Return From " + chosenArrivalAirport + " to " + chosenDepartureAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("TimeRoman", Font.BOLD, 18)));*/
+
+            for (int i = 0; i < returnFlights.size(); i++) {
+                rdepartureTime = Integer.parseInt(returnFlights.get(i).split(",")[8]);
+                rarrivalTime = Integer.parseInt(returnFlights.get(i).split(",")[10]);
+                int rdepartureDay = Integer.parseInt(returnFlights.get(i).split(",")[2]);
+                int rdepartureMonth = Integer.parseInt(returnFlights.get(i).split(",")[1]);
+                int rdepartureYear = Integer.parseInt(returnFlights.get(i).split(",")[0]);
+                System.out.println(rdepartureDay + " " + rdepartureMonth + " " + rdepartureYear);
+                String rdepartureTimeStr = String.format("%2d:%02d", rdepartureTime / 100, rdepartureTime % 100);
+                System.out.println(rdepartureTimeStr);
+                String rarrivalTimeStr = String.format("%2d:%02d", rarrivalTime / 100, rarrivalTime % 100);
+                System.out.println(rarrivalTimeStr);
+                rflightTime = rarrivalTime - rdepartureTime;
+                rflightTimeHours = rflightTime / 100;
+                rflightTimeMinutes = rflightTime % 100;
+                String rflightTimeStr = String.format("%2dh %02dm", rflightTimeHours, rflightTimeMinutes);
+                System.out.println(rflightTimeStr);
+                System.out.println("Flight Number: " + returnFlights.get(i).split(",")[5] + "\n" + " Departure Time: " + rdepartureTimeStr + "\n" + " Arrival Time: " + rarrivalTimeStr + "\n" + "Flight Time: " + rflightTimeStr + " Departure Date: " + rdepartureMonth + "/" + rdepartureDay + "/" + rdepartureYear);
+                returnFlightDetails.add("Flight Number: " + returnFlights.get(i).split(",")[5] + " Departure Time: " + rdepartureTimeStr + " Arrival Time: " + rarrivalTimeStr + " Flight Time: " + rflightTimeStr + " DepartureDate: " + rdepartureMonth + "/" + rdepartureDay + "/" + rdepartureYear);
+                System.out.println(returnFlightDetails);
+            }
+            searchReturnResultsPanel.add(book1);
+            book1.addActionListener(this);
+
+            String[] returnFlightList = new String[returnFlightDetails.size()];
+            returnFlightList = returnFlightDetails.toArray(returnFlightList);
+
+            for (int i = 0; i < returnFlightDetails.size(); i++) {
+                JLabel label = new JLabel(returnFlightList[i]);
+            }
+            JList<String> returnList1 = new JList<>(returnFlightList);
+            returnList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            returnList1.setLayoutOrientation(JList.VERTICAL);
+            returnList1.setVisibleRowCount(-1);
+            JScrollPane rlistScroller = new JScrollPane(returnList1);
+            rlistScroller.setPreferredSize(new Dimension(800, 200));
+            searchReturnResultsPanel.add(rlistScroller);
+            searchReturnResultsPanel.add(book1);
+            book1.addActionListener(this);
+            book1.setActionCommand("Book");
+            searchResultPanel.add(searchReturnResultsPanel);
+            searchResultPanel.add(searchReturnResultsPanel);
+            frame.add(searchResultPanel);
+            frame.setVisible(true);
+
+
+        /*public void createSearchResultsPanel () {
+            JButton button = new JButton("Book");
+
+            int rdepartureTime = 0;
+            int rarrivalTime = 0;
+            int rflightTime = 0;
+            int rflightTimeHours = 0;
+            int rflightTimeMinutes = 0;
+
+            JButton book1 = new JButton("Book");
+            book1.addActionListener(this);
+            book1.setActionCommand("Book");
+
+            int departureTime = 0;
+            int arrivalTime = 0;
+            int flightTime = 0;
+            int flightTimeHours = 0;
+            int flightTimeMinutes = 0;
+
+            searchResultPanel = new JPanel();
+            searchResultPanel.setLayout(new GridLayout(2, 2, 100, 100));
+            searchResultPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                    "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("TimeRoman", Font.BOLD, 18)));
+
+            searchDepartResultsPanel = new JPanel();
+            searchDepartResultsPanel.setLayout(new FlowLayout());
+            searchDepartResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                    " Depart From " + chosenDepartureAirport + " to " + chosenArrivalAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("TimeRoman", Font.BOLD, 18)));
+
+            searchReturnResultsPanel = new JPanel();
+            searchReturnResultsPanel.setLayout(new FlowLayout());
+            searchReturnResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
+                    " Return From " + chosenArrivalAirport + " to " + chosenDepartureAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("TimeRoman", Font.BOLD, 18)));
+
+            for (int i = 0; i < departFlights.size(); i++) {
+                departureTime = Integer.parseInt(departFlights.get(i).split(",")[8]);
+                arrivalTime = Integer.parseInt(departFlights.get(i).split(",")[10]);
+                int departureDay = Integer.parseInt(departFlights.get(i).split(",")[2]);
+                int departureMonth = Integer.parseInt(departFlights.get(i).split(",")[1]);
+                int departureYear = Integer.parseInt(departFlights.get(i).split(",")[0]);
+                System.out.println(departureDay + " " + departureMonth + " " + departureYear);
+                String departureTimeStr = String.format("%2d:%02d", departureTime / 100, departureTime % 100);
+                System.out.println(departureTimeStr);
+                String arrivalTimeStr = String.format("%2d:%02d", arrivalTime / 100, arrivalTime % 100);
+                System.out.println(arrivalTimeStr);
+                flightTime = arrivalTime - departureTime;
+                flightTimeHours = flightTime / 100;
+                flightTimeMinutes = flightTime % 100;
+                String flightTimeStr = String.format("%2dh %02dm", flightTimeHours, flightTimeMinutes);
+                System.out.println(flightTimeStr);
+                System.out.println("Flight Number: " + departFlights.get(i).split(",")[5] + "\n" + " Departure Time: " + departureTimeStr + "\n" + " Arrival Time: " + arrivalTimeStr + "\n" + "Flight Time: " + flightTimeStr + " Departure Date: " + departureMonth + "/" + departureDay + "/" + departureYear);
+                departFlightDetails.add("Flight Number: " + departFlights.get(i).split(",")[5] + " Departure Time: " + departureTimeStr + " Arrival Time: " + arrivalTimeStr + " Flight Time: " + flightTimeStr + " DepartureDate: " + departureMonth + "/" + departureDay + "/" + departureYear);
+                System.out.println(departFlightDetails);
+            }
+            searchDepartResultsPanel.add(button);
+            button.addActionListener(this);
+
+            String[] departFlightList = new String[departFlightDetails.size()];
+            departFlightList = departFlightDetails.toArray(departFlightList);
+
+            for (int i = 0; i < departFlightDetails.size(); i++) {
+                JLabel label = new JLabel(departFlightList[i]);
+            }
+            JList<String> departList1 = new JList<>(departFlightList);
+            departList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            departList1.setLayoutOrientation(JList.VERTICAL);
+            departList1.setVisibleRowCount(-1);
+            JScrollPane listScroller = new JScrollPane(departList1);
+            listScroller.setPreferredSize(new Dimension(800, 200));
+            searchDepartResultsPanel.add(listScroller);
+            searchDepartResultsPanel.add(button);
+            button.addActionListener(this);
+            button.setActionCommand("Book");
+            searchResultPanel.add(searchDepartResultsPanel);
+            searchResultPanel.add(searchReturnResultsPanel);
+            frame.add(searchResultPanel);
+            frame.setVisible(true);
+        }
+    }*/
+
+        }
 
     public void createButtonPanel() {
         buttonPanel = new JPanel(new FlowLayout());
@@ -317,7 +540,7 @@ public class UI extends JFrame implements ActionListener {
 
 
     public void fillAirportCBoxFromTxtFile() {
-        String filePath = "C:\\Users\\vader\\IdeaProjects\\CompSci240-FinalGroupProject1\\ARS\\src\\airports.csv";
+        String filePath = "C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\airports.csv";
 
         try {
             Scanner reader = new Scanner(new File(filePath));
