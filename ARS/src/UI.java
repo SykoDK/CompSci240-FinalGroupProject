@@ -93,7 +93,7 @@ public class UI extends JFrame implements ActionListener {
     }
 
     public void searchDepartFlights() {
-        String schedulePath = "C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\schedule.txt";
+        String schedulePath = "ARS/src/schedule.txt";
         chosenDepartureAirport = ((cityDepartureCBox.getSelectedItem().toString()).split(",")[0]);
         System.out.println(chosenDepartureAirport);
         chosenArrivalAirport = ((cityArrivalCBox.getSelectedItem().toString()).split(",")[0]);
@@ -139,7 +139,7 @@ public class UI extends JFrame implements ActionListener {
     }
 
     public void searchReturnFlights() {
-        String schedulePath = "C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\schedule.txt";
+        String schedulePath = "ARS/src/schedule.txt";
 
         System.out.println(chosenReturnDate);
         chosenNumPassenger = (String) numPassengerCBox.getSelectedItem();
@@ -577,7 +577,7 @@ public class UI extends JFrame implements ActionListener {
 
 
     public void fillAirportCBoxFromTxtFile() {
-        String filePath = "C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\airports.csv";
+        String filePath = "ARS/src/airports.csv";
 
         try {
             Scanner reader = new Scanner(new File(filePath));
