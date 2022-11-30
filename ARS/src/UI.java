@@ -53,8 +53,11 @@ public class UI extends JFrame implements ActionListener {
     private ArrayList<String> Airports;
     private ArrayList<String> departFlights = new ArrayList<String>();
     private ArrayList<String> departFlightDetails = new ArrayList<String>();
+    private ArrayList<String> departFlight = new ArrayList<>();
+    private ArrayList<String> returnFlight = new ArrayList<>();
     private ArrayList<String> returnFlightDetails = new ArrayList<String>();
     private ArrayList<String> returnFlights = new ArrayList<String>();
+    private ArrayList<Reservation> reservationList = new ArrayList<>();
     private String chosenDepartureAirport;
     private String chosenArrivalAirport;
     private String chosenDepartureDate;
@@ -66,6 +69,15 @@ public class UI extends JFrame implements ActionListener {
     private String chosenReturnDay;
     private String chosenReturnDate;
     private String chosenNumPassenger;
+    private String departureTimeStr;
+    private String arrivalTimeStr;
+    private String  rdepartureTimeStr;
+    private String  rarrivalTimeStr;
+    private String departFlightNumber;
+    private String returnFlightNumber;
+    private String departDetails;
+    JList<String> departList1;
+    JScrollPane listScroller;
 
     //private static String DEFAULT_DATE_FORMAT = "MM/dd/yyyy";
 
@@ -161,7 +173,7 @@ public class UI extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent ae) {
         switch (ae.getActionCommand()) {
-            case "Search":
+            case "Search Flights":
                 searchDepartFlights();
                 searchReturnFlights();
                 reservationPanel.setVisible(false);
@@ -169,18 +181,9 @@ public class UI extends JFrame implements ActionListener {
                 createAvailableFLights();
                 createDeparturePanel();
                 createReturnPanel();
-               // createSearchResultsPanel();
                 searchResultPanel.setVisible(true);
                 searchResultPanel.repaint();
                 searchResultPanel.revalidate();
-
-
-               // createReturnPanel();
-                //searchDepartResultsPanel.setVisible(true);
-                //searchReturnResultsPanel.setVisible(true);
-                //searchDepartResultsPanel.repaint();
-               // searchReturnResultsPanel.repaint();
-
                 createButtonPanel();
                 break;
             case "Reset":
@@ -190,48 +193,6 @@ public class UI extends JFrame implements ActionListener {
                 returnDateTextField.setDate(DateTextField.getToday());
                 numPassengerCBox.setSelectedIndex(0);
                 seatSelectCBox.setSelectedIndex(0);
-                break;
-            case "Book":
-                System.out.println("Flight Booked");
-                searchResultPanel.setVisible(false);
-                createFlightConfirmationPanel();
-                flightConfirmationPanel.setVisible(true);
-                flightConfirmationPanel.repaint();
-                flightConfirmationPanel.revalidate();
-                flightConfirmationButtonPanel.setVisible(true);
-
-                Reservation reservation = new Reservation();
-                reservation.setDepartureFlight(departFlightDetails.get(0));
-                reservation.setReturnFlight(returnFlightDetails.get(0));
-                reservation.setNumPassengers(chosenNumPassenger);
-                reservation.setSeatType(seatSelectCBox.getSelectedItem().toString());
-                reservation.setDepartureDate(departureDateTextField.getText());
-                reservation.setReturnDate(returnDateTextField.getText());
-                reservation.setDepartureAirport(chosenDepartureAirport);
-                reservation.setArrivalAirport(chosenArrivalAirport);
-                reservation.setDepartureTime(departFlightDetails.get(1));
-                reservation.setArrivalTime(departFlightDetails.get(2));
-                reservation.setReturnDepartureTime(returnFlightDetails.get(1), returnDateTextField);
-                reservation.setReturnArrivalTime(returnFlightDetails.get(2), returnDateTextField);
-                reservation.setDepartureFlightNumber(departFlightDetails.get(0));
-                reservation.setReturnFlightNumber(returnFlightDetails.get(0));
-                reservation.getDepartureFlightNumber();
-                System.out.println(reservation.getDepartureFlight());
-                System.out.println(reservation.getReturnFlight());
-                System.out.println(reservation.getNumPassengers());
-                System.out.println(reservation.getSeatType());
-                System.out.println(reservation.getDepartureDate());
-                System.out.println(reservation.getReturnDate());
-
-                break;
-            case "Confirm":
-                System.out.println("Flight Confirmed");
-                flightConfirmationPanel.setVisible(false);
-                createFlightConfirmationPanel();
-                flightConfirmationPanel.setVisible(true);
-                flightConfirmationPanel.repaint();
-                flightConfirmationPanel.revalidate();
-                flightConfirmationButtonPanel.setVisible(true);
                 break;
             case "Cancel":
                 //searchPanel.setVisible(false);
@@ -243,7 +204,66 @@ public class UI extends JFrame implements ActionListener {
                 System.out.println("Exit button pressed");
                 System.exit(0);
                 break;
+            case " Back to Search":
+                break;
+            case "Book Flight":
+                System.out.println("Flight Booked");
+                searchResultPanel.setVisible(false);
+                createFlightConfirmationPanel();
+                createFlightConfirmationButtonPanel();
+                flightConfirmationPanel.setVisible(true);
+                flightConfirmationPanel.repaint();
+                flightConfirmationPanel.revalidate();
+                flightConfirmationButtonPanel.setVisible(true);
+                flightConfirmationButtonPanel.repaint();
+                flightConfirmationButtonPanel.revalidate();
+
+                Reservation reservation = new Reservation();
+                reservation.setDepartureFlight(departFlight.get(0));
+                reservation.setReturnFlight(returnFlight.get(0));
+                reservation.setNumPassengers(chosenNumPassenger);
+                reservation.setSeatType(seatSelectCBox.getSelectedItem().toString());
+                reservation.setDepartureDate(departureDateTextField.getText());
+                reservation.setReturnDate(returnDateTextField.getText());
+                reservation.setDepartureAirport(chosenDepartureAirport);
+                reservation.setArrivalAirport(chosenArrivalAirport);
+                reservation.setDepartureTime(departFlight.get(1));
+                reservation.setArrivalTime(departFlight.get(2));
+                reservation.setReturnDepartureTime(returnFlight.get(1), returnDateTextField);
+                reservation.setReturnArrivalTime(returnFlight.get(2), returnDateTextField);
+                reservation.setDepartureFlightNumber(departFlight.get(0));
+                reservation.setReturnFlightNumber(returnFlight.get(0));
+                reservation.getDepartureFlightNumber();
+                System.out.println(reservation.getDepartureFlight());
+                System.out.println(reservation.getReturnFlight());
+                System.out.println(reservation.getNumPassengers());
+                System.out.println(reservation.getSeatType());
+                System.out.println(reservation.getDepartureDate());
+                System.out.println(reservation.getReturnDate());
+                reservationList.add(reservation);
+                break;
+
+            case "Back to Search Results":
+                flightConfirmationPanel.setVisible(false);
+                flightConfirmationButtonPanel.setVisible(false);
+                searchResultPanel.setVisible(true);
+                searchResultPanel.repaint();
+                searchResultPanel.revalidate();
+                break;
+
+            case "Confirm":
+                System.out.println("Flight Confirmed");
+                flightConfirmationPanel.setVisible(false);
+                createFlightConfirmationPanel();
+                flightConfirmationPanel.setVisible(true);
+                flightConfirmationPanel.repaint();
+                flightConfirmationPanel.revalidate();
+                flightConfirmationButtonPanel.setVisible(true);
+                break;
+            case "Continue":
+                break;
         }
+
 
     }
 
@@ -251,9 +271,41 @@ public class UI extends JFrame implements ActionListener {
         flightConfirmationPanel = new JPanel();
         flightConfirmationPanel.setLayout(new BoxLayout(flightConfirmationPanel, BoxLayout.Y_AXIS));
         flightConfirmationPanel.setBackground(Color.WHITE);
+        departList1.getListSelectionListeners();
+        System.out.println(departList1.getSelectedValue());
+      //  departDetails = departDetails.substring(1, departDetails.length() - 1);
+        departFlightNumber = Arrays.toString(departList1.getSelectedValue().split(",")[1].split(" "));;
+        System.out.println(departDetails);
+        System.out.println(departFlightNumber);
         flightConfirmationPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        flightConfirmationPanel.add(new JLabel("Flight Confirmation"));
 
-        add(flightConfirmationPanel);
+        flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        flightConfirmationPanel.add(new JLabel("Flight Number: " + departFlightNumber));
+        flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        flightConfirmationPanel.add(new JLabel("Departure Date: " + chosenDepartureDate));
+        flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        flightConfirmationPanel.add(new JLabel("Departure Time: " + departureTimeStr));
+        flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        flightConfirmationPanel.add(new JLabel("Arrival Time: " + arrivalTimeStr));
+        flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        flightConfirmationPanel.add(new JLabel("Arrival Date: " + chosenReturnDate));
+        flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        flightConfirmationPanel.add(new JLabel("Departure Airport: " + chosenDepartureAirport));
+        flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        flightConfirmationPanel.add(new JLabel("Arrival Airport: " + chosenArrivalAirport));
+        flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        flightConfirmationPanel.add(new JLabel("Number of Passengers: " + chosenNumPassenger));
+        flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+       // flightConfirmationPanel.add(new JLabel("Seat Type: " + chosenSeatType));
+        //flightConfirmationPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        flightConfirmationPanel.setVisible(true);
+
+    }
+
+    public void createFlightConfirmationButtonPanel() {
         flightConfirmationButtonPanel = new JPanel();
         flightConfirmationButtonPanel.setLayout(new BoxLayout(flightConfirmationButtonPanel, BoxLayout.X_AXIS));
         flightConfirmationButtonPanel.setBackground(Color.WHITE);
@@ -264,11 +316,12 @@ public class UI extends JFrame implements ActionListener {
         cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(this);
         cancelButton.setActionCommand("Cancel");
-
+        flightConfirmationButtonPanel.add(confirmButton);
+        flightConfirmationButtonPanel.add(cancelButton);
         add(flightConfirmationButtonPanel);
-
     }
-    public void createConfirmationScreeen() {
+
+    public void createConfirmationScreen() {
         confirmationPanel = new JPanel();
         confirmationPanel.setLayout(new GridLayout(2, 1));
         confirmationPanel.setBackground(Color.WHITE);
@@ -318,11 +371,6 @@ public class UI extends JFrame implements ActionListener {
     }
 
     public void createAvailableFLights() {
-        /*availableFlightsPanel = new JPanel();
-        availableFlightsPanel.setLayout(new GridLayout(1, 2, 250, 500));
-        availableFlightsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
-                new Font("TimeRoman", Font.BOLD, 18)));*/
         searchResultPanel = new JPanel();
         searchResultPanel.setLayout(new GridLayout(2, 1, 250, 50));
         searchResultPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
@@ -339,39 +387,19 @@ public class UI extends JFrame implements ActionListener {
         searchReturnResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
                 " Return From " + chosenArrivalAirport + " to " + chosenDepartureAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
                 new Font("TimeRoman", Font.BOLD, 18)));
-
     }
-
 
     public void createDeparturePanel() {
 
-        JButton book = new JButton("Book");
+        JButton book = new JButton("Book Flight");
         book.addActionListener(this);
-        book.setActionCommand("Book");
+        book.setActionCommand("Book Flight");
 
         int departureTime = 0;
         int arrivalTime = 0;
         int flightTime = 0;
         int flightTimeHours = 0;
         int flightTimeMinutes = 0;
-
-        /*searchResultPanel = new JPanel();
-        searchResultPanel.setLayout(new GridLayout(2, 2, 100, 100));
-        searchResultPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
-                new Font("TimeRoman", Font.BOLD, 18)));
-
-        searchDepartResultsPanel = new JPanel();
-        searchDepartResultsPanel.setLayout(new FlowLayout());
-        searchDepartResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                " Depart From " + chosenDepartureAirport + " to " + chosenArrivalAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
-                new Font("TimeRoman", Font.BOLD, 18)));*/
-
-        /*searchReturnResultsPanel = new JPanel();
-        searchReturnResultsPanel.setLayout(new FlowLayout());
-        searchReturnResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                " Return From " + chosenArrivalAirport + " to " + chosenDepartureAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
-                new Font("TimeRoman", Font.BOLD, 18)));*/
 
         for (int i = 0; i < departFlights.size(); i++) {
             departureTime = Integer.parseInt(departFlights.get(i).split(",")[8]);
@@ -389,8 +417,10 @@ public class UI extends JFrame implements ActionListener {
             flightTimeMinutes = flightTime % 100;
             String flightTimeStr = String.format("%2dh %02dm", flightTimeHours, flightTimeMinutes);
             System.out.println(flightTimeStr);
-            System.out.println("Flight Number: " + departFlights.get(i).split(",")[5] + "\n" + " Departure Time: " + departureTimeStr + "\n" + " Arrival Time: " + arrivalTimeStr + "\n" + "Flight Time: " + flightTimeStr + " Departure Date: " + departureMonth + "/" + departureDay + "/" + departureYear);
-            departFlightDetails.add("Flight Number: " + departFlights.get(i).split(",")[5] + " Departure Time: " + departureTimeStr + " Arrival Time: " + arrivalTimeStr + " Flight Time: " + flightTimeStr + " DepartureDate: " + departureMonth + "/" + departureDay + "/" + departureYear);
+            departFlightNumber = departFlights.get(i).split(",")[5];
+            System.out.println("Flight Number: " + departFlights.get(i).split(",")[5] + "," + "\n" + " Departure Time: " + departureTimeStr+ "," + "\n" + " Arrival Time: " + arrivalTimeStr + "," + "\n" + "Flight Time: " + flightTimeStr + "," + " Departure Date: " + departureMonth + "/" + departureDay + "/" + departureYear+ ",");
+            departFlightDetails.add("Flight Number: " + departFlights.get(i).split(",")[5] + "," + " Departure Time: " + departureTimeStr + "," + " Arrival Time: " + arrivalTimeStr + "," + " Flight Time: " + flightTimeStr + "," + " DepartureDate: " + departureMonth + "/" + departureDay + "/" + departureYear+ ",");
+            departFlight.add(departFlights.get(i).split(",")[5] + "," + departureTimeStr + "," + arrivalTimeStr + "," +  flightTimeStr + "," + departureMonth + "/" + departureDay + "/" + departureYear+ ",");
             System.out.println(departFlightDetails);
         }
         searchDepartResultsPanel.add(book);
@@ -402,16 +432,16 @@ public class UI extends JFrame implements ActionListener {
         for (int i = 0; i < departFlightDetails.size(); i++) {
             JLabel label = new JLabel(departFlightList[i]);
         }
-        JList<String> departList1 = new JList<>(departFlightList);
+        departList1 = new JList<>(departFlightList);
         departList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         departList1.setLayoutOrientation(JList.VERTICAL);
         departList1.setVisibleRowCount(-1);
-        JScrollPane listScroller = new JScrollPane(departList1);
+        listScroller = new JScrollPane(departList1);
         listScroller.setPreferredSize(new Dimension(800, 200));
         searchDepartResultsPanel.add(listScroller);
         searchDepartResultsPanel.add(book);
         book.addActionListener(this);
-        book.setActionCommand("Book");
+        book.setActionCommand("Book Flight");
         searchResultPanel.add(searchDepartResultsPanel);
         searchResultPanel.add(searchReturnResultsPanel);
         frame.add(searchResultPanel);
@@ -427,23 +457,9 @@ public class UI extends JFrame implements ActionListener {
             int rflightTimeHours = 0;
             int rflightTimeMinutes = 0;
 
-            JButton book1 = new JButton("Book");
+            JButton book1 = new JButton("Book Flight");
             book1.addActionListener(this);
-            book1.setActionCommand("Book");
-
-
-            /*searchResultPanel = new JPanel();
-            searchResultPanel.setLayout(new GridLayout(2, 2, 100, 100));
-            searchResultPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                    "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
-                    new Font("TimeRoman", Font.BOLD, 18)));
-
-
-            searchReturnResultsPanel = new JPanel();
-            searchReturnResultsPanel.setLayout(new FlowLayout());
-            searchReturnResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                    " Return From " + chosenArrivalAirport + " to " + chosenDepartureAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
-                    new Font("TimeRoman", Font.BOLD, 18)));*/
+            book1.setActionCommand("Book Flight");
 
             for (int i = 0; i < returnFlights.size(); i++) {
                 rdepartureTime = Integer.parseInt(returnFlights.get(i).split(",")[8]);
@@ -461,8 +477,10 @@ public class UI extends JFrame implements ActionListener {
                 rflightTimeMinutes = rflightTime % 100;
                 String rflightTimeStr = String.format("%2dh %02dm", rflightTimeHours, rflightTimeMinutes);
                 System.out.println(rflightTimeStr);
+                returnFlightNumber = returnFlights.get(i).split(",")[5];
                 System.out.println("Flight Number: " + returnFlights.get(i).split(",")[5] + "\n" + " Departure Time: " + rdepartureTimeStr + "\n" + " Arrival Time: " + rarrivalTimeStr + "\n" + "Flight Time: " + rflightTimeStr + " Departure Date: " + rdepartureMonth + "/" + rdepartureDay + "/" + rdepartureYear);
                 returnFlightDetails.add("Flight Number: " + returnFlights.get(i).split(",")[5] + " Departure Time: " + rdepartureTimeStr + " Arrival Time: " + rarrivalTimeStr + " Flight Time: " + rflightTimeStr + " DepartureDate: " + rdepartureMonth + "/" + rdepartureDay + "/" + rdepartureYear);
+                returnFlight.add(departFlights.get(i).split(",")[5] + "," + rdepartureTimeStr + "," + rarrivalTimeStr + "," +  rflightTimeStr + "," + rdepartureMonth + "/" + rdepartureDay + "/" + rdepartureYear+ ",");
                 System.out.println(returnFlightDetails);
             }
             searchReturnResultsPanel.add(book1);
@@ -483,103 +501,18 @@ public class UI extends JFrame implements ActionListener {
             searchReturnResultsPanel.add(rlistScroller);
             searchReturnResultsPanel.add(book1);
             book1.addActionListener(this);
-            book1.setActionCommand("Book");
+            book1.setActionCommand("Book Flights");
             searchResultPanel.add(searchReturnResultsPanel);
             searchResultPanel.add(searchReturnResultsPanel);
             frame.add(searchResultPanel);
             frame.setVisible(true);
-
-
-        /*public void createSearchResultsPanel () {
-            JButton button = new JButton("Book");
-
-            int rdepartureTime = 0;
-            int rarrivalTime = 0;
-            int rflightTime = 0;
-            int rflightTimeHours = 0;
-            int rflightTimeMinutes = 0;
-
-            JButton book1 = new JButton("Book");
-            book1.addActionListener(this);
-            book1.setActionCommand("Book");
-
-            int departureTime = 0;
-            int arrivalTime = 0;
-            int flightTime = 0;
-            int flightTimeHours = 0;
-            int flightTimeMinutes = 0;
-
-            searchResultPanel = new JPanel();
-            searchResultPanel.setLayout(new GridLayout(2, 2, 100, 100));
-            searchResultPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                    "Available Flights", TitledBorder.CENTER, TitledBorder.TOP,
-                    new Font("TimeRoman", Font.BOLD, 18)));
-
-            searchDepartResultsPanel = new JPanel();
-            searchDepartResultsPanel.setLayout(new FlowLayout());
-            searchDepartResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                    " Depart From " + chosenDepartureAirport + " to " + chosenArrivalAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
-                    new Font("TimeRoman", Font.BOLD, 18)));
-
-            searchReturnResultsPanel = new JPanel();
-            searchReturnResultsPanel.setLayout(new FlowLayout());
-            searchReturnResultsPanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(),
-                    " Return From " + chosenArrivalAirport + " to " + chosenDepartureAirport + " ", TitledBorder.CENTER, TitledBorder.TOP,
-                    new Font("TimeRoman", Font.BOLD, 18)));
-
-            for (int i = 0; i < departFlights.size(); i++) {
-                departureTime = Integer.parseInt(departFlights.get(i).split(",")[8]);
-                arrivalTime = Integer.parseInt(departFlights.get(i).split(",")[10]);
-                int departureDay = Integer.parseInt(departFlights.get(i).split(",")[2]);
-                int departureMonth = Integer.parseInt(departFlights.get(i).split(",")[1]);
-                int departureYear = Integer.parseInt(departFlights.get(i).split(",")[0]);
-                System.out.println(departureDay + " " + departureMonth + " " + departureYear);
-                String departureTimeStr = String.format("%2d:%02d", departureTime / 100, departureTime % 100);
-                System.out.println(departureTimeStr);
-                String arrivalTimeStr = String.format("%2d:%02d", arrivalTime / 100, arrivalTime % 100);
-                System.out.println(arrivalTimeStr);
-                flightTime = arrivalTime - departureTime;
-                flightTimeHours = flightTime / 100;
-                flightTimeMinutes = flightTime % 100;
-                String flightTimeStr = String.format("%2dh %02dm", flightTimeHours, flightTimeMinutes);
-                System.out.println(flightTimeStr);
-                System.out.println("Flight Number: " + departFlights.get(i).split(",")[5] + "\n" + " Departure Time: " + departureTimeStr + "\n" + " Arrival Time: " + arrivalTimeStr + "\n" + "Flight Time: " + flightTimeStr + " Departure Date: " + departureMonth + "/" + departureDay + "/" + departureYear);
-                departFlightDetails.add("Flight Number: " + departFlights.get(i).split(",")[5] + " Departure Time: " + departureTimeStr + " Arrival Time: " + arrivalTimeStr + " Flight Time: " + flightTimeStr + " DepartureDate: " + departureMonth + "/" + departureDay + "/" + departureYear);
-                System.out.println(departFlightDetails);
-            }
-            searchDepartResultsPanel.add(button);
-            button.addActionListener(this);
-
-            String[] departFlightList = new String[departFlightDetails.size()];
-            departFlightList = departFlightDetails.toArray(departFlightList);
-
-            for (int i = 0; i < departFlightDetails.size(); i++) {
-                JLabel label = new JLabel(departFlightList[i]);
-            }
-            JList<String> departList1 = new JList<>(departFlightList);
-            departList1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-            departList1.setLayoutOrientation(JList.VERTICAL);
-            departList1.setVisibleRowCount(-1);
-            JScrollPane listScroller = new JScrollPane(departList1);
-            listScroller.setPreferredSize(new Dimension(800, 200));
-            searchDepartResultsPanel.add(listScroller);
-            searchDepartResultsPanel.add(button);
-            button.addActionListener(this);
-            button.setActionCommand("Book");
-            searchResultPanel.add(searchDepartResultsPanel);
-            searchResultPanel.add(searchReturnResultsPanel);
-            frame.add(searchResultPanel);
-            frame.setVisible(true);
-        }
-    }*/
-
-        }
+    }
 
     public void createButtonPanel() {
         buttonPanel = new JPanel(new FlowLayout());
 
         exitButton = new JButton("Exit");
-        searchButton = new JButton("Search");
+        searchButton = new JButton("Search Flights");
         resetButton = new JButton("Reset");
         cancelButton = new JButton("Cancel");
 
