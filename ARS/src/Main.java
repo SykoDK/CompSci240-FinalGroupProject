@@ -58,8 +58,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        airportFile = new File("ARS/src/airports.csv");
-        scheduleFile = new File("ARS/src/southwest.txt");
+        airportFile = new File("ARS\\src\\airports.csv");
+        scheduleFile = new File("ARS\\src\\southwest.txt");
 
         SplashScreen splashThread = new SplashScreen();
         splashThread.start();

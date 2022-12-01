@@ -14,7 +14,7 @@ import javax.swing.JProgressBar;
  */
 public class SplashScreen extends Thread {
     private static JProgressBar progressBar = new JProgressBar();
-    private JLabel image = new JLabel(new ImageIcon("C:\\Users\\iangr\\IdeaProjects\\CompSci240-FinalGroupProject\\ARS\\src\\images.jpeg"));
+    private JLabel image = new JLabel(new ImageIcon("ARS\\src\\images.jpeg"));
     private JFrame frame;
     private JLabel message = new JLabel();
 
@@ -26,6 +26,7 @@ public class SplashScreen extends Thread {
         frame = new JFrame();
         frame.setSize(600,600);
         frame.add(image);
+        frame.setLocationRelativeTo(null);
         frame.setUndecorated(true);
         frame.setVisible(true);;
         progressBar.setBounds(150,390,301,10);
@@ -36,6 +37,7 @@ public class SplashScreen extends Thread {
         progressBar.setValue(0);
         frame.add(progressBar);
         frame.add(message);
+
     }
 
     public void run() {
